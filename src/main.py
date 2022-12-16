@@ -1,45 +1,42 @@
-import os
-from pprint import pprint
+import sys
 
-import boto3
-import requests
-
+from commands.init import init
+from commands.list import list
 from config.settings import settings
-from misc import s3
+from utils import is_configured
+
+COMMANDS = {
+    'init': init,
+    'list': list,
+}
 
 
-def get_bucket_objects(boto3_client, bucket_name: str):
-    for key in boto3_client.list_objects(Bucket=settings.AWS_BUCKET)['Contents']:
-        print(key['Key'])
+def main():
+    # TODO: Разкомментить
+    # sys.tracebacklimit = -1
+    try:
+        app_name = sys.argv[1]
+    except Exception:
+        raise Exception("Введите название вызываемого приложения и команду")
 
+    if app_name == settings.APP_NAME:
+        try:
+            command_name= sys.argv[2]
+            command = COMMANDS[command_name]
+        except Exception:
+            raise Exception(f'Введите команду из списка доступных: {[COMMANDS.keys()]}')
+    else:
+        raise Exception(f"Неправильное название приложения. Доступное: {settings.APP_NAME}")
 
-def upload_file_to_bucket():
-    pass
+    if command_name == 'init':
+        command()
+    else:
+        configured = is_configured()
+        if configured:
+            pass
+        else:
+            raise Exception('Выполните команду init')
 
 
 if __name__ == '__main__':
-    print("Program started...\n")
-
-    # get_bucket_objects(s3, settings.AWS_BUCKET)
-    #
-    # s3.upload_file('test.txt', settings.AWS_BUCKET, 'test.txt')
-    #
-    # get_bucket_objects(s3, settings.AWS_BUCKET)
-
-
-
-    # TODO: Помотреть че такое argparse
-    # TODO: Помотреть че такое configparser
-
-    # Way of running terminal commands in python:
-    # os.system("ls -a")
-
-    # Way of making requests:
-    url = f"https://functions.yandexcloud.net/d4elrmj7thsco08lickg"
-    response = requests.post(
-        url,
-        headers={'Accept': '*/*', 'Authorization': 'Basic ...', },
-        json={}
-    )
-    data = response.json()
-    pprint(data)
+    main()
