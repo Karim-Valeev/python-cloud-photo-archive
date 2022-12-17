@@ -1,7 +1,7 @@
 import pathlib
 
 import configparser
-from config.settings import settings
+from settings import settings
 
 
 def get_bucket_objects(boto3_client, bucket_name: str):

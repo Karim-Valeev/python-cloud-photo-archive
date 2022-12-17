@@ -1,4 +1,3 @@
-import os
 import pathlib
 
 import configparser
@@ -6,7 +5,7 @@ import configparser
 import boto3
 from botocore.exceptions import ClientError
 
-from config.settings import settings
+from settings import settings
 
 
 def init():

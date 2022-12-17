@@ -5,4 +5,4 @@ University project with Yandex Cloud
 `pip install -r src/requirements.txt`
 
 ## Запуск приложения cloudphoto
-`python src/main.py cloudphoto <command_name>`
+`python src/main.py cloudphoto <command_name> <options>`

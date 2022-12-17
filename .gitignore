@@ -1,6 +1,5 @@
 test.py
 publications_source
-.env
 src/staticfiles/
 src/test.py
 
