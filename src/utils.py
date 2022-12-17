@@ -4,12 +4,6 @@ import configparser
 from settings import settings
 
 
-def get_bucket_objects(boto3_client, bucket_name: str):
-    for key in boto3_client.list_objects(Bucket=settings.AWS_BUCKET)['Contents']:
-        print(key['Key'])
-    # s3.upload_file('test.txt', settings.AWS_BUCKET, 'test.txt')
-
-
 def read_config() -> configparser.ConfigParser:
     home = pathlib.Path.home()
     config_path = home / ".config" / "cloudphoto" / "cloudphotorc"
@@ -29,3 +23,13 @@ def is_configured() -> bool:
     region = config.has_option(settings.CONFIG_DEFAULT_SECTION, 'region')
 
     return bucket and aws_access_key_id and aws_secret_access_key and endpoint_url and region
+
+
+def get_album(boto3_client, bucket: str, album: str):
+    """
+    Возвращает список фотографий, либо, если альбом пустой, список из одного обьекта-указателя на папку альбом.
+    """
+    album_photos = boto3_client.list_objects(
+        Bucket=bucket, Prefix=album + "/", Delimiter="/"
+    ).get('Contents')
+    return album_photos

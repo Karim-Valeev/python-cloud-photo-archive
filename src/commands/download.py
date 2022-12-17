@@ -1,12 +1,7 @@
 import os
 from pathlib import Path
 
-
-def get_album_photos(boto3_client, bucket: str, album: str):
-    album_photos = boto3_client.list_objects(
-        Bucket=bucket, Prefix=album + "/", Delimiter="/"
-    ).get('Contents')
-    return album_photos
+from utils import get_album
 
 
 def download(boto3_client, bucket: str, args):
@@ -16,14 +11,18 @@ def download(boto3_client, bucket: str, args):
     if not os.path.exists(path):
         raise Exception(f'Директория {path} не найдена') from None
 
-    album_photos = get_album_photos(boto3_client, bucket, args.album)
-    if album_photos:
-        for photo in album_photos:
-            response = boto3_client.get_object(Bucket=bucket, Key=photo["Key"])
-            filename = photo["Key"].split("/")[1]
-            filepath = path / filename
-            with filepath.open("wb") as f:
-                f.write(response["Body"].read())
+    album = get_album(boto3_client, bucket, args.album)
+    if album:
+        if album[0]["Key"] == args.album + '/':
+            print(f'Альбом {args.album} пустой')
+        else:
+            for photo in album:
+                print(photo)
+                response = boto3_client.get_object(Bucket=bucket, Key=photo["Key"])
+                filename = photo["Key"].split("/")[1]
+                filepath = path / filename
+                with filepath.open("wb") as f:
+                    f.write(response["Body"].read())
     else:
         raise Exception(f'Альбома {args.album} не сущетсвует.') from None
 

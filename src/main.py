@@ -25,7 +25,7 @@ def main():
     parser.add_argument('app')
     parser.add_argument('command')
     parser.add_argument('--album', default=None)
-    parser.add_argument('--photo')
+    parser.add_argument('--photo', default=None)
     parser.add_argument('--path', default='.')
     args = parser.parse_args()
 
