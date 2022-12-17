@@ -1,12 +1,12 @@
+import configparser
 import pathlib
 
-import configparser
 from settings import settings
 
 
 def read_config() -> configparser.ConfigParser:
     home = pathlib.Path.home()
-    config_path = home / ".config" / "cloudphoto" / "cloudphotorc"
+    config_path = home / '.config' / 'cloudphoto' / 'cloudphotorc'
     config = configparser.ConfigParser()
     config.read(str(config_path))
     return config
@@ -30,6 +30,6 @@ def get_album(boto3_client, bucket: str, album: str):
     Возвращает список фотографий, либо, если альбом пустой, список из одного обьекта-указателя на папку альбом.
     """
     album_photos = boto3_client.list_objects(
-        Bucket=bucket, Prefix=album + "/", Delimiter="/"
+        Bucket=bucket, Prefix=album + '/', Delimiter='/'
     ).get('Contents')
     return album_photos
