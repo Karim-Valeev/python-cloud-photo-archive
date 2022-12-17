@@ -4,7 +4,8 @@ from utils import get_album
 def list(boto3_client, bucket: str, args):
     if not args.album:
         album_names = set()
-        for photo in boto3_client.list_objects(Bucket=bucket)['Contents']:
+        photos = boto3_client.list_objects(Bucket=bucket).get('Contents', [])
+        for photo in photos:
             album_names.add(photo['Key'].split('/')[0])
 
         if album_names:

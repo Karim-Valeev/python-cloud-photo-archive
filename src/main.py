@@ -1,6 +1,5 @@
 import argparse
-# TODO: Разкомментить
-# import sys
+import sys
 from commands import delete, download, init, list, mksite, upload
 
 import boto3
@@ -19,8 +18,7 @@ COMMANDS = {
 
 
 def main():
-    # TODO: Разкомментить
-    # sys.tracebacklimit = -1
+    sys.tracebacklimit = -1
 
     parser = argparse.ArgumentParser(description='Python cloud photo archive with Yandex Cloud.')
     parser.add_argument('app')
@@ -35,7 +33,8 @@ def main():
             command_name = args.command
             command = COMMANDS[command_name]
         except KeyError:
-            raise Exception(f'Введите команду из списка доступных: {[COMMANDS.keys()]}') from None
+            commands = [key for key in COMMANDS.keys()]
+            raise Exception(f'Введите команду из списка доступных: {commands}') from None
     else:
         raise Exception(f'Неправильное название приложения. Доступные: {settings.APP_NAME}') from None
 

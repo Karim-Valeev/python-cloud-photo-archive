@@ -25,7 +25,7 @@ def init():
             aws_secret_access_key=aws_secret_access_key,
             region_name=settings.AWS_REGION,
         )
-        s3.create_bucket(Bucket=bucket, ACL='public-read-write')
+        s3.create_bucket(Bucket=bucket, ACL='public-read')
     except ClientError as err:
         if err.response['Error']['Code'] == 'BucketAlreadyOwnedByYou':
             pass
